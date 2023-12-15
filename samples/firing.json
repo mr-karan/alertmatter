@@ -1,0 +1,59 @@
+{
+    "receiver": "team_app",
+    "status": "firing",
+    "alerts": [
+        {
+            "status": "firing",
+            "labels": {
+                "alertgroup": "node",
+                "alertname": "HostHighCpuLoad",
+                "group": "app",
+                "hostname": "app-live-app-10.0.1.200",
+                "instance_name": "app-live-app",
+                "service": "app-app",
+                "severity": "warning",
+                "tier": "node-exporter"
+            },
+            "annotations": {
+                "description": "CPU load is \u003e 90%\nCurrent Value: 0.996152777778",
+                "group": "app",
+                "hostname": "app-live-app-10.0.1.200",
+                "instance_name": "app-live-app",
+                "load": "996.2m%",
+                "service": "app-app",
+                "summary": "Host high CPU load"
+            },
+            "startsAt": "2023-12-14T08:26:51.654152412Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://grafana:3000/vmalert/alert?group_id=13314901909313262932\u0026alert_id=11175077366292956842",
+            "fingerprint": "73657bd16d59d372"
+        }
+    ],
+    "groupLabels": {
+        "alertname": "HostHighCpuLoad",
+        "service": "app-app"
+    },
+    "commonLabels": {
+        "alertgroup": "node",
+        "alertname": "HostHighCpuLoad",
+        "group": "app",
+        "hostname": "app-live-app-10.0.1.200",
+        "instance_name": "app-live-app",
+        "service": "app-app",
+        "severity": "warning",
+        "tier": "node-exporter"
+    },
+    "commonAnnotations": {
+        "description": "CPU load is \u003e 90%\nCurrent Value: 0.996152777778",
+        "group": "app",
+        "hostname": "app-live-app-10.0.1.200",
+        "instance_name": "app-live-app",
+        "load": "996.2m%",
+        "service": "app-app",
+        "summary": "Host high CPU load"
+    },
+    "externalURL": "http://f3a2968a52ee:9093",
+    "version": "4",
+    "groupKey": "{}/{tier=\"node-exporter\"}/{service=~\"app.*\"}:{alertname=\"HostHighCpuLoad\", service=\"app-app\"}",
+    "truncatedAlerts": 0
+}
