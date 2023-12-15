@@ -4,4 +4,4 @@ RUN apt-get -y update && apt install -y ca-certificates
 WORKDIR /app
 COPY alertmatter.bin .
 
-CMD [ "./alertmatter.bin" ]
+ENTRYPOINT [ "./alertmatter.bin" ]
