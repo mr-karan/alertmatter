@@ -95,13 +95,13 @@ func prepareMessage(payload AlertmanagerPayload, channel string) MattermostMessa
 func sendToMattermost(mmMessage MattermostMessage, url string) error {
 	jsonData, err := json.Marshal(mmMessage)
 	if err != nil {
-		logger.Error("Error marshalling JSON", err)
+		logger.Error("Error marshalling JSON", "err", err)
 		return err
 	}
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		logger.Error("Error sending request to Mattermost", err)
+		logger.Error("Error sending request to Mattermost", "err", err)
 		return err
 	}
 	defer resp.Body.Close()
@@ -136,7 +136,7 @@ func handleAlert(w http.ResponseWriter, r *http.Request) {
 
 	mmMessage := prepareMessage(payload, channel)
 	if err := sendToMattermost(mmMessage, mattermostURL); err != nil {
-		logger.Error("Failed to send to Mattermost", err)
+		logger.Error("Failed to send to Mattermost", "err", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

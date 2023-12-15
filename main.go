@@ -40,7 +40,7 @@ func main() {
 
 	logger.Info("Starting server", "addr", serverAddr, "version", buildString)
 	if err := (http.ListenAndServe(serverAddr, nil)); err != nil {
-		logger.Error("Error starting server", err)
+		logger.Error("Error starting server", "err", err)
 		os.Exit(1)
 	}
 }
