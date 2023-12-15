@@ -1,6 +1,10 @@
+<a href="https://zerodha.tech"><img src="https://zerodha.tech/static/images/github-badge.svg" align="right" /></a>
+
 # alertmatter
 
 _Alertmanager - Mattermost Webhook Receiver_
+
+![img](./samples/screenshot.png)
 
 ## Overview
 
@@ -49,8 +53,6 @@ Replace `<your-service-address>` with the address where your service is running 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d @samples/firing.json http://localhost:7777/alert\?channel\=production-alerts
 ```
-
-![img](./samples/screenshot.png)
 
 ## Contributing
 

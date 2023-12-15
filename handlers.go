@@ -156,6 +156,7 @@ func setColor(status string) string {
 }
 
 // convertAlertToFields converts an Alert to a slice of Fields.
+// Modified version of https://github.com/cpanato/mattermost-plugin-alertmanager/blob/main/server/webhook.go#L79
 func convertAlertToFields(alert Alert, externalURL, receiver string) []Field {
 	var fields []Field
 
