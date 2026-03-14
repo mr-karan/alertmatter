@@ -40,13 +40,33 @@ type Alert struct {
 	Fingerprint  string            `json:"fingerprint"`
 }
 
+// AlertProps stores structured alert metadata in the Mattermost post's props
+// field so that downstream tools (e.g. silencer) can read labels without
+// parsing Markdown.
+type AlertProps struct {
+	// Per-alert data: one entry per alert in the group.
+	Alerts []AlertPropEntry `json:"alerts"`
+	// Group-level labels shared by all alerts in this notification.
+	GroupLabels map[string]string `json:"group_labels,omitempty"`
+	// Labels common to every alert in this notification.
+	CommonLabels map[string]string `json:"common_labels,omitempty"`
+}
+
+// AlertPropEntry holds the structured data for a single alert.
+type AlertPropEntry struct {
+	Labels      map[string]string `json:"labels"`
+	Status      string            `json:"status"`
+	Fingerprint string            `json:"fingerprint"`
+}
+
 // MattermostMessage represents a message to be sent to Mattermost.
 type MattermostMessage struct {
-	Text        string       `json:"text"`
-	Username    string       `json:"username"`
-	IconEmoji   string       `json:"icon_emoji"`
-	Attachments []Attachment `json:"attachments"`
-	Channel     string       `json:"channel"`
+	Text        string         `json:"text"`
+	Username    string         `json:"username"`
+	IconEmoji   string         `json:"icon_emoji"`
+	Attachments []Attachment   `json:"attachments"`
+	Channel     string         `json:"channel"`
+	Props       map[string]any `json:"props,omitempty"`
 }
 
 // Field represents a single field in an attachment.
@@ -81,14 +101,36 @@ var (
 // prepareMessage converts AlertmanagerPayload to MattermostMessage.
 func prepareMessage(payload AlertmanagerPayload, channel string) MattermostMessage {
 	attachments := make([]Attachment, 0, len(payload.Alerts))
+	alertEntries := make([]AlertPropEntry, 0, len(payload.Alerts))
+
 	for _, alert := range payload.Alerts {
 		attachment := Attachment{
 			Color:  setColor(alert.Status),
 			Fields: convertAlertToFields(alert, payload.ExternalURL, payload.Receiver),
 		}
 		attachments = append(attachments, attachment)
+		alertEntries = append(alertEntries, AlertPropEntry{
+			Labels:      alert.Labels,
+			Status:      alert.Status,
+			Fingerprint: alert.Fingerprint,
+		})
 	}
-	return MattermostMessage{Attachments: attachments, Username: "alertmatter", IconEmoji: ":bell:", Channel: channel}
+
+	alertProps := AlertProps{
+		Alerts:       alertEntries,
+		GroupLabels:  payload.GroupLabels,
+		CommonLabels: payload.CommonLabels,
+	}
+
+	return MattermostMessage{
+		Attachments: attachments,
+		Username:    "alertmatter",
+		IconEmoji:   ":bell:",
+		Channel:     channel,
+		Props: map[string]any{
+			"alert_data": alertProps,
+		},
+	}
 }
 
 // sendToMattermost sends a MattermostMessage to the Mattermost server.
